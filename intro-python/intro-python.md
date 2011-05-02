@@ -433,5 +433,5 @@ Se usan más seguido de lo que creen!
 
 ----
 
-# <http://github.com/dmoisset/slides/intro-python>
+# <http://github.com/dmoisset/slides/> (intro-python)
 

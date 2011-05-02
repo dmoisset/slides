@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<!--
+  Copyright 2010 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+  Original slides: Marcin Wichary (mwichary@google.com)
+  Modifications: Ernest Delgado (ernestd@google.com)
+                 Alex Russell (slightlyoff@chromium.org)
+
+  landslide modifications: Adam Zapletal (adamzap@gmail.com)
+                           Nicolas Perriault (nperriault@gmail.com)
+-->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Introducción a Python</title>
+    <!-- Styles -->
+    
+    <style type="text/css" media="print">
+      * {
+    margin: 0;
+    padding: 0;
+}
+@page {
+    size: landscape;
+}
+body {
+    font: 100% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
+    padding: 0;
+    margin: 0;
+}
+div.slide {
+    min-width: 800px;
+    min-height: 600px;
+    padding: 1em;
+    overflow: hidden;
+    page-break-after: always;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+div.slide div.inner {
+    width: 800px;
+    height: 600px;
+    margin: auto;
+    display: table-cell;
+}
+h1 {
+    font-size: 2.4em;
+}
+h2 {
+    font-size: 1.4em;
+}
+h3 {
+    margin: 1em 0;
+}
+ul {
+    margin: 0;
+    padding: 0;
+}
+p, li, pre {
+    margin: 1em 0;
+}
+li {
+    margin-left: 2em;
+}
+a {
+    color: #000000;
+}
+pre, code {
+    max-width: 800px;
+    background: #eee;
+    font-family: Monaco, monospace;
+    font-size: 90%;
+}
+pre {
+    padding: .2em .5em;
+    overflow: hidden;
+    border-radius: .8em;
+}
+code {
+    padding: 0 .2em;
+}
+.slide header:only-child h1 {
+  line-height: 180%;
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+  height: 600px;
+  width: 800px;
+  font-size: 48px;
+  margin-top:100px;
+  margin-bottom:100px;
+}
+#toc, #help, .slide aside, .slide footer, .slide .notes {
+  display: none;
+}
+
+    </style>
+    <style type="text/css" media="screen, projection">
+      body {
+  font: 14px "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
+  background: #778;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+div.presentation {
+  position: absolute;
+  width: 100%;
+  display: table-cell;
+  vertical-align: middle;
+  height: 100%;
+  background: inherit;
+}
+
+div.slides {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  left: 0;
+  top: 0;
+  position: absolute;
+  display: block;
+  -webkit-transition: -webkit-transform 1s ease-in-out;
+  -moz-transition: -moz-transform 1s ease-in-out;
+  -o-transition: -o-transform 1s ease-in-out;
+}
+
+div.slide {
+  display: none;
+  position: absolute;
+  overflow: hidden;
+  width: 900px;
+  height: 700px;
+  left: 50%;
+  top: 50%;
+  margin-top: -350px;
+  background: -webkit-gradient(linear, left bottom, left top, from(#bbd), to(#fff));
+  background-color: #eee;
+  background: -moz-linear-gradient(bottom, #bbd, #fff);
+  -webkit-transition: margin 0.25s ease-in-out;
+  -moz-transition: margin 0.25s ease-in-out;
+  -o-transition: margin 0.25s ease-in-out;
+  border-top-left-radius: 20px;
+  -moz-border-radius-topleft: 20px;
+  -webkit-border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  -moz-border-radius-topright: 20px;
+  -webkit-border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  -moz-border-radius-bottomright: 20px;
+  -webkit-border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  -moz-border-radius-bottomleft: 20px;
+  -webkit-border-bottom-left-radius: 20px;
+}
+
+div.slide p {
+  font-size: 20px;
+}
+
+.slide.far-past {
+  display: block;
+  margin-left: -2400px;
+}
+
+.slide.past {
+  display: block;
+  margin-left: -1400px;
+}
+
+.slide.current {
+  display: block;
+  margin-left: -450px;
+}
+
+.slide.future {
+  display: block;
+  margin-left: 500px;
+}
+
+.slide.far-future {
+  display: block;
+  margin-left: 1500px;
+}
+
+body.three-d div.slides {
+  -webkit-transform: translateX(50px) scale(0.8) rotateY(10deg);
+  -moz-transform: translateX(50px) scale(0.8) rotateY(10deg);
+  -o-transform: translateX(50px) scale(0.8) rotateY(10deg);
+}
+
+
+/* Content */
+
+header:not(:only-child) {
+  font-family: 'Lucida Grande';
+  font-weight: normal;
+  font-size: 50px;
+  letter-spacing: -.05em;
+  color: white;
+  color: black;
+  text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
+  position: absolute;
+  left: 30px;
+  top: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+header h1, header h2 {
+  display: inline;
+  font-size: 100%;
+  font-weight: normal;
+  padding: 0;
+  margin: 0;
+}
+
+header h2:first-child {
+  margin-top: 0;
+}
+
+section, .slide header:only-child h1 {
+  font-family: 'Lucida Grande';
+  color: #3f3f3f;
+  text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 100px;
+  display: block;
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  display: inline-block;
+  text-decoration: none;
+  line-height: 110%;
+  border-bottom: 2px solid #3f3f3f;
+}
+
+pre {
+  font-size: 16px;
+  font-family: Monaco, Courier, monospace;
+}
+
+li {
+  padding: 10px 0;
+  font-size: 20px;
+}
+
+.slide header:only-child h1 {
+  line-height: 180%;
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+  height: 700px;
+  width: 900px;
+  font-size: 50px;
+  margin-top:100px;
+  margin-bottom:100px;
+}
+
+.sidebar {
+  background: -webkit-gradient(linear, top right, bottom right, from(#dde), to(#fff));
+  -webkit-transition: margin 0.25s ease-in-out;
+  background-color: #eee;
+  background: -moz-linear-gradient(right, #dde, #fff);
+  border-right: 5px solid #ccd;
+  z-index: 9999999;
+  height: 100%;
+  overflow: hidden;
+  top: 0;
+  position: absolute;
+  display: block;
+  margin: 0;
+  margin-left: -400px;
+  padding: 10px 16px;
+  overflow: auto;
+  -webkit-transition: margin 0.2s ease-in-out;
+  -moz-transition: margin 0.2s ease-in-out;
+  -o-transition: margin 0.2s ease-in-out;
+}
+
+.sidebar h2 {
+  text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+.sidebar table {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border-collapse: collapse;
+}
+
+.sidebar table caption {
+  display: none;
+}
+
+.sidebar tr {
+  margin: 2px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.sidebar th {
+  text-align: left;
+  font-weight: normal;
+  max-width: 300px;
+  overflow: hidden;
+}
+
+.sidebar tr.sub th {
+  text-indent: 20px;
+}
+
+.sidebar td {
+  text-align: right;
+  min-width: 20px;
+}
+
+.sidebar a {
+  display: block;
+  text-decoration: none;
+  border-bottom: none;
+  padding: 4px 0;
+}
+
+.sidebar tr.active {
+  background: #ff0;
+}
+
+aside {
+  display: none;
+}
+  aside.source {
+    position: absolute;
+    bottom: 6px;
+    left: 10px;
+    text-indent: 10px;
+  }
+  aside.page_number {
+    position: absolute;
+    bottom: 6px;
+    right: 10px;
+    text-indent: 10px;
+  }
+
+.notes {
+  display: none;
+  padding: 10px;
+  background: #ccc;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+  div.slide p.notes {
+    font-size: 90%;
+}
+
+/* Pygments default theme */
+.hll { background-color: #ffffcc }
+.c { color: #408080; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.cp { color: #BC7A00 } /* Comment.Preproc */
+.c1 { color: #408080; font-style: italic } /* Comment.Single */
+.cs { color: #408080; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.gr { color: #FF0000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #00A000 } /* Generic.Inserted */
+.go { color: #808080 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0040D0 } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #7D9029 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #999999; font-weight: bold } /* Name.Entity */
+.ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #A0A000 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #BB6688 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+
+    </style>
+    
+    <!-- /Styles -->
+    <!-- Javascripts -->
+    
+    <script>
+      function main() {
+  // Since we don't have the fallback of attachEvent and
+  // other IE only stuff we won't try to run JS for IE.
+  // It will run though when using Google Chrome Frame
+  if (document.all) { return; }
+
+  var currentSlideNo;
+  var notesOn = false;
+  var slides = document.getElementsByClassName('slide');
+  var touchStartX = 0;
+  var spaces = /\s+/, a1 = [""];
+  var tocOpened = false;
+  var helpOpened = false;
+
+  var str2array = function(s) {
+    if (typeof s == "string" || s instanceof String) {
+      if (s.indexOf(" ") < 0) {
+        a1[0] = s;
+        return a1;
+      } else {
+        return s.split(spaces);
+      }
+    }
+    return s;
+  };
+
+  var trim = function(str) {
+    return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+  };
+
+  var addClass = function(node, classStr) {
+    classStr = str2array(classStr);
+    var cls = " " + node.className + " ";
+    for (var i = 0, len = classStr.length, c; i < len; ++i) {
+      c = classStr[i];
+      if (c && cls.indexOf(" " + c + " ") < 0) {
+        cls += c + " ";
+      }
+    }
+    node.className = trim(cls);
+  };
+
+  var removeClass = function(node, classStr) {
+    var cls;
+    if (classStr !== undefined) {
+      classStr = str2array(classStr);
+      cls = " " + node.className + " ";
+      for (var i = 0, len = classStr.length; i < len; ++i) {
+        cls = cls.replace(" " + classStr[i] + " ", " ");
+      }
+      cls = trim(cls);
+    } else {
+      cls = "";
+    }
+    if (node.className != cls) {
+      node.className = cls;
+    }
+  };
+
+  var getSlideEl = function(slideNo) {
+    if (slideNo > 0) {
+      return slides[slideNo - 1];
+    } else {
+      return null;
+    }
+  };
+
+  var getSlideTitle = function(slideNo) {
+    var el = getSlideEl(slideNo);
+    if (el) {
+      var headers = el.getElementsByTagName('header');
+      if (headers.length > 0) {
+        return el.getElementsByTagName('header')[0].innerText;
+      }
+    }
+    return null;
+  };
+
+  var changeSlideElClass = function(slideNo, className) {
+    var el = getSlideEl(slideNo);
+    if (el) {
+      removeClass(el, 'far-past past current future far-future');
+      addClass(el, className);
+    }
+  };
+
+  var updateSlideClasses = function() {
+    window.location.hash = "slide" + currentSlideNo;
+
+    for (var i=1; i<currentSlideNo-1; i++) {
+      changeSlideElClass(i, 'far-past');
+    }
+
+    changeSlideElClass(currentSlideNo - 1, 'past');
+    changeSlideElClass(currentSlideNo, 'current');
+    changeSlideElClass(currentSlideNo + 1, 'future');
+
+    for (var i=currentSlideNo+2; i<slides.length+1; i++) {
+      changeSlideElClass(i, 'far-future');
+    }
+
+    highlightCurrentTocLink();
+
+    document.getElementsByTagName('title')[0].innerText = getSlideTitle(currentSlideNo);
+  };
+
+  var highlightCurrentTocLink = function() {
+    var tocRows = document.getElementById('toc').getElementsByTagName('tr');
+    for (var i=0; i<tocRows.length; i++) {
+      removeClass(tocRows.item(i), 'active');
+    }
+
+    var currentTocRow = document.getElementById('toc-row-' + currentSlideNo);
+    if (currentTocRow) {
+      addClass(currentTocRow, 'active');
+    }
+  }
+
+  var nextSlide = function() {
+    if (currentSlideNo < slides.length) {
+      currentSlideNo++;
+    }
+    updateSlideClasses();
+  };
+
+  var prevSlide = function() {
+    if (currentSlideNo > 1) {
+      currentSlideNo--;
+    }
+    updateSlideClasses();
+  };
+
+  var showNotes = function() {
+    var notes = getSlideEl(currentSlideNo).getElementsByClassName('notes');
+    for (var i = 0, len = notes.length; i < len; i++) {
+      notes.item(i).style.display = (notesOn) ? 'none':'block';
+    }
+    notesOn = (notesOn) ? false : true;
+  };
+
+  var showSlideNumbers = function() {
+    var asides = document.getElementsByClassName('page_number');
+    var hidden = asides[0].style.display != 'block';
+    for (var i = 0; i < asides.length; i++) {
+      asides.item(i).style.display = hidden ? 'block' : 'none';
+    }
+  };
+
+  var showSlideSources = function() {
+    var asides = document.getElementsByClassName('source');
+    var hidden = asides[0].style.display != 'block';
+    for (var i = 0; i < asides.length; i++) {
+      asides.item(i).style.display = hidden ? 'block' : 'none';
+    }
+  };
+
+  var showToc = function() {
+    if (helpOpened) {
+        showHelp();
+    }
+
+    var toc = document.getElementById('toc');
+
+    toc.style.marginLeft = tocOpened ? '-400px' : '0px';
+
+    tocOpened = !tocOpened;
+  };
+
+  var showHelp = function() {
+    var help = document.getElementById('help');
+
+    help.style.marginLeft = helpOpened ? '-400px' : '0px';
+
+    helpOpened = !helpOpened;
+  };
+
+  var switch3D = function() {
+    if (document.body.className.indexOf('three-d') == -1) {
+      document.getElementsByClassName('presentation')[0].style.webkitPerspective = '1000px';
+      document.body.className += ' three-d';
+    } else {
+      window.setTimeout("document.getElementsByClassName('presentation')[0].style.webkitPerspective = '0';", 2000);
+      document.body.className = document.body.className.replace(/three-d/, '');
+    }
+  };
+
+  var handleBodyKeyDown = function(event) {
+    switch (event.keyCode) {
+      case 37: // left arrow
+        prevSlide();
+        break;
+      case 39: // right arrow
+      case 32: // space
+        nextSlide();
+        break;
+      case 50: // 2
+        showNotes();
+        break;
+      case 51: // 3
+        switch3D();
+        break;
+      case 72: // h
+        showHelp();
+        break;
+      case 78: // n
+        showSlideNumbers();
+        break;
+      case 83: // s
+        showSlideSources();
+        break;
+      case 84: // t
+        showToc();
+        break;
+    }
+  };
+
+  var handleWheel = function(event) {
+    if (tocOpened || helpOpened) {
+      return;
+    }
+
+    var delta = 0;
+
+    if (!event) {
+      event = window.event;
+    }
+
+    if (event.wheelDelta) {
+      delta = event.wheelDelta/120;
+      if (window.opera) delta = -delta;
+    } else if (event.detail) {
+      delta = -event.detail/3;
+    }
+
+    if (delta && delta <0) {
+      nextSlide();
+    } else if (delta) {
+      prevSlide();
+    }
+  };
+
+  var addTouchListeners = function() {
+    document.addEventListener('touchstart', function(e) {
+      touchStartX = e.touches[0].pageX;
+    }, false);
+    document.addEventListener('touchend', function(e) {
+      var pixelsMoved = touchStartX - e.changedTouches[0].pageX;
+      var SWIPE_SIZE = 150;
+      if (pixelsMoved > SWIPE_SIZE) {
+        nextSlide();
+      }
+      else if (pixelsMoved < -SWIPE_SIZE) {
+       prevSlide();
+      }
+    }, false);
+  };
+
+  var addTocLinksListeners = function() {
+    var tocLinks = document.getElementById('toc').getElementsByTagName('a');
+    for (var i=0; i < tocLinks.length; i++) {
+      tocLinks.item(i).addEventListener('click', function(e) {
+        currentSlideNo = Number(this.attributes['href'].value.replace('#slide', ''));
+        updateSlideClasses();
+        return false;
+      }, true);
+    }
+  };
+
+  // initialize
+
+  (function() {
+    if (window.location.hash != "") {
+      currentSlideNo = Number(window.location.hash.replace('#slide', ''));
+    } else {
+      currentSlideNo = 1;
+    }
+
+    document.addEventListener('keydown', handleBodyKeyDown, false);
+    document.addEventListener('DOMMouseScroll', handleWheel, false);
+    window.onmousewheel = document.onmousewheel = handleWheel
+
+    var els = slides;
+    for (var i = 0, el; el = els[i]; i++) {
+      addClass(el, 'slide far-future');
+    }
+    updateSlideClasses();
+
+    // add support for finger events (filter it by property detection?)
+    addTouchListeners();
+
+    addTocLinksListeners();
+  })();
+};
+
+    </script>
+    
+    <!-- /Javascripts -->
+</head>
+<body>
+  <div class="presentation">
+    <div class="slides">
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Introducción a Python</h1></header>
+          
+          
+          <section><h2>PyDay Cordoba 2011</h2>
+<h2>Daniel F. Moisset</h2>
+<p>dmoisset@machinalis.com
+@dmoisset</p>
+<h2>Machinalis - http://www.machinalis.com/</h2>
+<h2>Python Argentina - http://python.org.ar/</h2>
+<p class="notes">Hola. Me llamo Daniel, y lamento tanto como ustedes que me hayan hecho levantar temprano. Pero por otro lado, me han dado un poco el honor de arrancar este evento, al cual le han puesto mucho laburo; estos eventos son una de las cosas que hace que la comunidad de Python Argentina, de la cual soy orgullosos miembro, sea tan grosa</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            1/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          
+          <section><p>(o así me dijeron que se titulaba la charla)</p>
+<h2>Solía dar otra charla titulada «De 0 a Python en 45'»</h2>
+<p class="notes">A los organizadores los estoy estafando un poco. Me invitaron para que de una charla que solía dar antes. Esta charla tenía un estilo más de tutorial y entraba más en detalle fino sobre sintaxis de Python. La charla es <em>buenísima</em>, tanto que la he visto robada en internet con otra gente como autores, y también me han copiado el título para otras charlas de este evento. En realidad es una charla que vengo dando hace cerca de 5 años, y si bien el público se renueva, como dice Mirta, yo no</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            2/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide foo has_notes">
+        <div class="inner">
+          
+          
+          <section><h2>Pero después me aburrí de darla tantas veces</h2>
+<h2>y además va quedando cada vez más desactualizada</h2>
+<p><a href="http://github.com/dmoisset/slides/">http://github.com/dmoisset/slides/</a></p>
+<p>Aunque si se van y lo que quieren es parender el lenguaje, mejor lean <a href="http://tutorial.python.org.ar/">el tutorial</a></p>
+<p class="notes">Así que esta es una versión un poco distinta, y un poco más dinámica. Para que sepan lo que se están perdiendo, les dejo un link a la otra charla. Tenían más chances de salir directamente programando, pero había algo importante que creo que tiene que tener esta charla, que es mostrar las cosas más picantes. O sea, convencerlos de que Python es la posta. En realidad les acabo de quemar la charla, porque es todo lo que tengo para decir. que</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            3/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide">
+        <div class="inner">
+          
+          <header><h1>Python</h1></header>
+          
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            4/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide">
+        <div class="inner">
+          
+          <header><h1>es</h1></header>
+          
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            5/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide">
+        <div class="inner">
+          
+          <header><h1>la</h1></header>
+          
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            6/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide">
+        <div class="inner">
+          
+          <header><h1>posta!</h1></header>
+          
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            7/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Preguntas?</h1></header>
+          
+          
+          <section><p class="notes">Preguntas? (pausa) OK, supongo que no alcanza con que les diga que Python es la posta, sino que los tengo que convencer un poco. En realidad, este slide dice "Preguntas"" como para que yo me acuerde que les tengo que hacer unas preguntas a ustedes para conocer a mi audiencia. La charla va a ser la misma pero me gusta enterarme de a quienes estoy aburriendo. Quienes de acá escucharon hablar de Python por primera vez cuando les anunciaron el evento? (pausa) Y quienes nunca han hecho nada en Python? (pausa) Y quienes han ecrito un "hola mundo"? y quienes se consideran "programadores en Python" (aunque sean newbies)? (pausa) OK. gracias, vamos a los bifes</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            8/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Python es portable</h1></header>
+          
+          
+          <section><ul>
+<li>32 y 64 bits</li>
+<li><strong>Windows</strong>, <strong>Linux</strong>, <strong>OS X</strong>(Mac)</li>
+<li>Solaris, </li>
+<li>MS-DOS</li>
+<li>AIX, AROS, AS/400, BeOS, MorphOS, OS/2, OS/390, QNX, VMS...</li>
+<li>iPod, Playstation, Palm, Nokia S60, Android, Windows CE....</li>
+</ul>
+<p class="notes">No voy a perder mucho tiempo hablando de features y listas que pueden encontrar en la web, asi que muy a la pasada les voy a contar que pueden correr Python en cualquier lado, </p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            9/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Python es software libre</h1></header>
+          
+          
+          <section><ul>
+<li>© Python Software Foundation</li>
+<li>Bajo una licencia libre</li>
+<li>La licencia no restringe uso para software cerrado</li>
+</ul>
+<p class="notes">Y que es libre, con todo lo que eso implica,</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            10/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Python es orientado a objetos</h1></header>
+          
+          
+          <section><h2>de verdad!</h2>
+<ul>
+<li>Los <code>int</code>s son objetos</li>
+<li>Los arreglos son objetos</li>
+<li>Los módulos son objetos</li>
+<li>Las funciones y métodos son objetos</li>
+<li>Las clases son objetos</li>
+</ul>
+<p class="notes">y que es orientado a objetos, puro. </p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            11/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Python es de propósito general</h1></header>
+          
+          
+          <section><ul>
+<li>Sistemas basados en BBDDs</li>
+<li>Sistemas con GUI</li>
+<li>Webservices</li>
+<li>Webapps </li>
+<li>Scripts cortos</li>
+<li>Servicios en red</li>
+<li>Extensiones scripteables para otros sistemas</li>
+</ul>
+<p class="notes">También les puedo decir que sirve para hacer realmente de todo.</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            12/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Y se usa para proyectos de verdad</h1></header>
+          
+          
+          <section><ul>
+<li>Youtube</li>
+<li>BitTorrent</li>
+<li>Bazaar</li>
+<li>Civilization 4</li>
+<li>EVE Online</li>
+<li>Reddit</li>
+</ul>
+<p class="notes">Y cuando digo de todo digo <em>de todo</em>.</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            13/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>El desarrollo está muy activo</h1></header>
+          
+          
+          <section><ul>
+<li>La línea 2.x es la más usada<ul>
+<li>Actualmente por 2.7</li>
+<li>Último release: Noviembre de 2010</li>
+</ul>
+</li>
+<li>La gente de a poco se pasa a 3.x<ul>
+<li>No es 100% compatible para atrás</li>
+<li>Pero han mejorado/simplificado varias cosas</li>
+<li>3.2 salió el Febrero de 2011</li>
+</ul>
+</li>
+</ul>
+<p class="notes">También podría dedicarle minutos a decirles que tiene un desarrollo muy activo y se mantiene al día de forma permanente</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            14/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Y hay varias implementaciones</h1></header>
+          
+          
+          <section><ul>
+<li>CPython<ul>
+<li>La original, implementada en C</li>
+<li>La "oficial", con los cambios más nuevos</li>
+</ul>
+</li>
+<li>Jython<ul>
+<li>Corre sobre la JVM</li>
+<li>Se integra bien con código Java</li>
+</ul>
+</li>
+<li>IronPython<ul>
+<li>Corre sobre la CLR de .NET</li>
+<li>Se integra bien con código .NET</li>
+</ul>
+</li>
+<li>PyPy<ul>
+<li>Compilador JIT. ¡Más rápido!</li>
+</ul>
+</li>
+<li>Stackless<ul>
+<li>Features interesantes para concurrencia liviana</li>
+</ul>
+</li>
+</ul>
+<p class="notes">no sólo la versión oficial, sino las diversas implementaciones.</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            15/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Mas features</h1></header>
+          
+          
+          <section><ul>
+<li>Puede interfacear con cosas en otros lenguajes</li>
+<li>Tipado dinámico, flexible</li>
+<li>Embebible en otros sistemas</li>
+<li>...</li>
+</ul>
+<p class="notes">Podrías listarles infinitos features</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            16/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Todo eso en</h1></header>
+          
+          
+          <section><h1><a href="http://python.org/">http://python.org/</a></h1>
+<p class="notes">No pierdo tiempo en decirles toda esa info porque esta en la web. Y si bien son todas cosas buenas, y lindas, no terminan de ser el motivo por el cual Python es la posta, que es de lo que vine a convencerlos.</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            17/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Mito 1</h1></header>
+          
+          
+          <section><h2>¡Es algo nuevo, poco probado!</h2>
+<p class="notes">Y lo primero que tengo que hacer para convencerlos, es sacar de sus cabezas los rumores que la gente hace circular sabiendo poco lo que dice. Por ejemplo esto:</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            18/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Mito 1</h1></header>
+          
+          
+          <section><h2>¡Es algo nuevo, poco probado!</h2>
+<ul>
+<li>Desde <strong>1991</strong></li>
+<li>4 años antes que Java</li>
+<li>10 años antes que C#</li>
+<li>Tan viejo como Visual Basic</li>
+</ul>
+<p class="notes">Aunque hay gente que crea que es algo nuevo, solamente porque escucho hablar de el hace poco (dado que no tiene una empresa atrás con un aparato de marketing gigante), pueden ver que es algo tanto o mas viejo y probado como varios lenguajes que nadie clasificaría como "experimental" o "demasiado nuevo"</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            19/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Mito 2</h1></header>
+          
+          
+          <section><h2>Es interpretado</h2>
+<p>(Y por lo tanto, es tecnología vieja!)</p>
+<p class="notes">Este otro mito es tan popular que hasta algunos programadores de Python lo creen</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            20/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Mito 2</h1></header>
+          
+          
+          <section><h2>Es interpretado</h2>
+<ul>
+<li>Todas las implementaciones compilan a bytecode (Igual que Java o C#)</li>
+<li>PyPy además compila el bytecode JIT a nativo</li>
+</ul>
+<p>Pero... sigue teniendo la flexibilidad de un intérprete</p>
+<ul>
+<li>Compilación casi instantánea, on-the-fly, por módulo</li>
+<li>Uso interactivo</li>
+<li>Introspección masiva y acceso al código desde el programa</li>
+</ul>
+<p class="notes">Y lo creen porque Python <em>parece</em> interpretado, al tener las cosas buenas de un intérprete. Es decir, un ciclo muy corto de trabajo entre escribir el código y estar probando lo que uno escribió, al punto de poder hacerse de forma interactiva, y poder observar e incluso mutar la estructura del programa mientras se ejecuta, lo que uno no hace todo los días pero permite muchos trucos útiles para debugging y para generación de código.</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            21/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Mito 3</h1></header>
+          
+          
+          <section><h2>Es lento</h2>
+<p class="notes">Otros "peros" que se escuchan son los peros sobre performance</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            22/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Mito 3</h1></header>
+          
+          
+          <section><h2>Es lento</h2>
+<ul>
+<li>Bueno, sí. Si uno lo trata de programar como si fuera C</li>
+<li>En la práctica no:<ul>
+<li>Hay que saber usar las herramientas y bibliotecas optimizadas</li>
+<li>Y en general el cuello de botella no es CPU</li>
+</ul>
+</li>
+</ul>
+<p class="notes">Otros "peros" que se escuchan son los peros sobre performance. Esos están un poco mejor fundados; si uno traduce uno a uno un algoritmo en C, la desventaja de performance se nota mucho. Pero no es la forma en la que los programadores de Python trabajamos. Python trae (tanto en la biblioteca estándar como en bibliotecas externas) una caja de herramientas con la mayoría de los algoritmos que uno necesita, escritos de forma más optimizada de lo que uno podría en C. Con lo cual, si uno conoce y elige estas herramientas, acaba teniendo código más rápido. Esto es algo que en realidad pasa en cualquier lenguaje, pero en Python se nota más; por suerte la disponibilidad de módulos para hacer <em>lo que sea</em> es alevosa. De todos modos, aún sin eso la diferencia de performance se nota solo cuando mi sistema es intensivo en CPU; si mi cuello de botella es la red, o el disco, o la base de datos, o el web server, o la interacción con el usuario, todo esto no importa.</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            23/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_notes">
+        <div class="inner">
+          
+          <header><h1>Mito 4</h1></header>
+          
+          
+          <section><h2>No threadea</h2>
+<ul>
+<li>Hay un porcentaje de verdad: sólo en la implementación oficial (CPython), el threading (que si hay) no aprovecha múltiples cores, solamente cuando los threads están corriendo todo código CPU intensivo escrito sin usar bibliotecas externas.<ul>
+<li>No importa en las otras implementaciones</li>
+<li>No importa si uno no necesita multi-core</li>
+<li>No importa si uno usa threading para multiplexar cosas bloqueantes (red, disco, UI)</li>
+<li>No importa si la parte CPU intensiva esta en libs externas (como debería!)</li>
+</ul>
+</li>
+<li>Ofrece alternativas multi-core más limpias (multiprocessing, sin estado compartido)</li>
+</ul>
+<p class="notes">Hay otro comentario popular sobre el soporte de threading. Que se basa en un hecho real que es el punto de arriba, pero en una malainterpretación de este hecho. En realidad el threading esta soportado, pero no se hace por hardware en algunos casos que no son los típicos que necesita un desarrollador de aplicaciones. Si quieren hacer threads paramostrar una barrita de progreso mientras guardan a disco, o para mandar muchos e-mails a la vez, en realidad no van a tener problemas. Y en otros de los casos, se pueden usar las alternativas que se proveen en la biblioteca, que permiten escribir código multi-core con un estilo donde uno tiene que pensar menos en race-conditions y sincronización. El caso real donde el threading puede ser un problema es si están escribiendo código de cálculo numérico de un modo que no está cubierto por ninguna biblioteca numérica de las disponibles; en ese caso probablemente les convenga trabajar en C (al menos para el cálculo. Yo haría el código alrededor de eso en Python). Pero si ustedes se dedican a computo de alta performance... ya sabían esto que les estoy diciendo.</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            24/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_code has_notes">
+        <div class="inner">
+          
+          <header><h1>El shell interactivo</h1></header>
+          
+          
+          <section><p>Lo que aparece detras de <code>&gt;&gt;&gt;</code> es lo que entra el usuario</p>
+<div class="highlight"><pre><span class="lineno"> 1</span> <span class="go">$ python</span>
+<span class="lineno"> 2</span> <span class="go">Python 2.6.5 (r265:79063, Apr 16 2010, 13:09:56) </span>
+<span class="lineno"> 3</span> <span class="go">[GCC 4.4.3] on linux2</span>
+<span class="lineno"> 4</span> <span class="go">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span>
+<span class="lineno"> 5</span> <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;Hola Python Day!&quot;</span>
+<span class="lineno"> 6</span> <span class="go">Hola Python Day!</span>
+<span class="lineno"> 7</span> <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">socket</span>
+<span class="lineno"> 8</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">()</span>
+<span class="lineno"> 9</span> <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">s</span>
+<span class="lineno">10</span> <span class="go">&lt;socket._socketobject object at 0xb7732454&gt;</span>
+<span class="lineno">11</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span> <span class="p">(</span><span class="s">&#39;www.google.com&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">))</span>
+<span class="lineno">12</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s">&#39;GET / HTTP/1.0</span><span class="se">\r\n\r\n</span><span class="s">&#39;</span><span class="p">)</span>
+<span class="lineno">13</span> <span class="go">18</span>
+<span class="lineno">14</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+<span class="lineno">15</span> <span class="go">&#39;HTTP/1.0 302 Found\r\nLocation: http://www.google.com.ar/\r\nCache-Control: private\r&#39;</span>
+</pre></div>
+
+<ul>
+<li>Práctiquisimo para probar ideas, módulos, aprender</li>
+</ul>
+<p class="notes">Suponiendo que ya los limpié de todos los prejuicios que podrían traer, vamos a empezar a ver algo hecho en Python. Una de las cosas prácticas en python es el shell interactivo, donde unopuede ir escribiendo líneas de programa e ir viendo como se ejecutan. Es de lo mejor para aprender, para debuguear y es algo que me gusta mostrar, por que para muchos programadores es algo nuevo. Y es algo que los programadores de python usamos muchísimo y nos permite probar una idea antes de sentarse a escribir código "de verdad" en un archivo. Aca pueden ver como además de mostrar un mensajito, cargo la biblioteca de networking básica (podría haber usado el cliente HTTP pero era más aburrido para este ejemplo),y me conecto al servidor web de google, les mando algo, leo la respuesta. En todo esto yo voy viendo que pasa y eligiendo que hacer cada vez que veo el triple triangulito.</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            25/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_code has_notes">
+        <div class="inner">
+          
+          <header><h1>Soporte completo unicode</h1></header>
+          
+          
+          <section><div class="highlight"><pre><span class="lineno">1</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-16&#39;</span><span class="p">)</span>
+<span class="lineno">2</span> <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">data</span>
+<span class="lineno">3</span> <span class="go">u&#39;¡Soy un texto multilingüe! Ես բազմալեզու տեքստ! 我是一个多语种的文字！&#39;</span>
+<span class="lineno">4</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">))</span>
+<span class="lineno">5</span> <span class="gp">&gt;&gt;&gt; </span><span class="nb">int</span><span class="p">(</span><span class="s">u&#39;৪२&#39;</span><span class="p">)</span>
+<span class="lineno">6</span> <span class="go">42</span>
+</pre></div>
+
+<p class="notes">Para mostrar que es algo moderno y adaptado al mundo globalizado y multilingüe, les quería mostrar que pueden trabajar con texto completamente internacionalizado, que puede venir e irse del programa codificado con distintos estándares, mientras al medio es verdadero texto con acentos en castellano, o armenio, o chino. No solo eso, sino que las funciones estandar, por ejemplo <code>int</code> que convierte una cadena a entero, saben trabajar con todo el juego de caracteres, por ejemplo el número 42 de ahi que esta escrito con un 4 bengalí y un 2 devanagari.</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            26/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_code has_notes">
+        <div class="inner">
+          
+          <header><h1>Sintáxis piola</h1></header>
+          
+          
+          <section><div class="highlight"><pre><span class="lineno">1</span> <span class="n">a</span> <span class="o">=</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># Nada raro aquí... sin punto y coma!</span>
+<span class="lineno">2</span> <span class="c"># Intercambio de valores entre variables</span>
+<span class="lineno">3</span> <span class="n">izq</span><span class="p">,</span> <span class="n">der</span> <span class="o">=</span> <span class="n">der</span><span class="p">,</span> <span class="n">izq</span> 
+<span class="lineno">4</span> <span class="c"># Comparaciones de más de 2 cosas</span>
+<span class="lineno">5</span> <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">longitud</span><span class="p">:</span> <span class="o">...</span> 
+<span class="lineno">6</span> <span class="c"># y sin paréntesis!</span>
+</pre></div>
+
+<p class="notes">Python se escribe de una forma muy limpita, donde no hay que salpicar el código con simbolitos solo porque si. Si se fijan mi código no tiene puntos y comas; son opcionales, y lo normal es no ponerlos cuando uno pone una instrucción por linea. O sea, el 99% de los casos. Tiene muchas notaciones que no son comunes en otros lenguajes, como el segundo y tercer ejemplo de ahi, pero que si se fijan son bastante obvios de leer sin tener que explicar mucho. Mucha gente dice que escribir python es casi como escribir en pseudocódigo. Eso quiere decir que los mismos atajos prácticos que uno hace al escribir para pensar un programa, en Python son parte del lenguaje y no hace falta ponerse a traducirlos.</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            27/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_code has_notes">
+        <div class="inner">
+          
+          <header><h1>Tipos de muy alto nivel</h1></header>
+          
+          
+          <section><h2>Listas</h2>
+<div class="highlight"><pre><span class="lineno"> 1</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">47</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">96</span><span class="p">,</span><span class="mi">32</span><span class="p">]</span>
+<span class="lineno"> 2</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+<span class="lineno"> 3</span> <span class="go">[1, 2, 3, 10]</span>
+<span class="lineno"> 4</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span>
+<span class="lineno"> 5</span> <span class="go">[-1, 96, 32]</span>
+<span class="lineno"> 6</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;hola&#39;</span><span class="p">)</span>
+<span class="lineno"> 7</span> <span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">l</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="lineno"> 8</span> <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">l</span>
+<span class="lineno"> 9</span> <span class="go">[&#39;hola&#39;]</span>
+<span class="lineno">10</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">l</span><span class="o">*</span><span class="mi">5</span>
+<span class="lineno">11</span> <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">l</span>
+<span class="lineno">12</span> <span class="go">[&#39;hola&#39;, &#39;hola&#39;, &#39;hola&#39;, &#39;hola&#39;, &#39;hola&#39;]</span>
+<span class="lineno">13</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;al medio&#39;</span><span class="p">]</span>
+<span class="lineno">14</span> <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">l</span>
+<span class="lineno">15</span> <span class="go">[&#39;hola&#39;, &#39;al medio&#39;, &#39;hola&#39;]</span>
+<span class="lineno">16</span> <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="lineno">17</span> <span class="go">al medio</span>
+</pre></div>
+
+<p class="notes">Python soporta tipos de alto nivel. El tipo llamado listas parece a primera vista un arreglo, pero se puede modificar, rebanar, estirar, y guardar cosas de varios tipos (explicar)</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            28/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_code has_notes">
+        <div class="inner">
+          
+          <header><h1>Tipos de muy alto nivel</h1></header>
+          
+          
+          <section><h2>Conjuntos</h2>
+<div class="highlight"><pre><span class="lineno"> 1</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+<span class="lineno"> 2</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">s2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">])</span>
+<span class="lineno"> 3</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span> <span class="o">|</span> <span class="n">s2</span>
+<span class="lineno"> 4</span> <span class="go">set([1, 2, 3, 5, 7, 10])</span>
+<span class="lineno"> 5</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span> <span class="o">-</span> <span class="n">s2</span>
+<span class="lineno"> 6</span> <span class="go">set([1, 10])</span>
+<span class="lineno"> 7</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span> <span class="o">&amp;</span> <span class="n">s2</span>
+<span class="lineno"> 8</span> <span class="go">set([2, 3])</span>
+<span class="lineno"> 9</span> <span class="go">&gt;&gt; 6 in s1</span>
+<span class="lineno">10</span> <span class="go">False</span>
+</pre></div>
+
+<p class="notes">explicar</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            29/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_code">
+        <div class="inner">
+          
+          <header><h1>Tipos de muy alto nivel</h1></header>
+          
+          
+          <section><h2>Conjuntos: y esto para que?</h2>
+<p>Eliminar duplicados en una lista:</p>
+<div class="highlight"><pre><span class="lineno">1</span> <span class="n">l</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+</pre></div>
+
+<p>Revisar permisos:</p>
+<div class="highlight"><pre><span class="lineno">1</span> <span class="k">if</span> <span class="n">usuario</span> <span class="ow">in</span> <span class="n">registrados</span><span class="o">-</span><span class="n">bloqueados</span><span class="p">:</span>
+</pre></div>
+
+<p>Se usan más seguido de lo que creen!</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            30/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_code">
+        <div class="inner">
+          
+          <header><h1>Tipos de muy alto nivel</h1></header>
+          
+          
+          <section><h2>Diccionarios</h2>
+<div class="highlight"><pre><span class="lineno"> 1</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;clave&#39;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span>
+<span class="lineno"> 2</span> <span class="go">         13: &#39;valor&#39;,</span>
+<span class="lineno"> 3</span> <span class="go">         }</span>
+<span class="lineno"> 4</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s">&#39;clave&#39;</span><span class="p">]</span>
+<span class="lineno"> 5</span> <span class="go">17</span>
+<span class="lineno"> 6</span> <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="lineno"> 7</span> <span class="go">2</span>
+<span class="lineno"> 8</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="s">&#39;otra&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="lineno"> 9</span> <span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">d</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span>
+<span class="lineno">10</span> <span class="gp">&gt;&gt;&gt; </span><span class="mi">13</span> <span class="ow">in</span> <span class="n">d</span>
+<span class="lineno">11</span> <span class="go">False</span>
+<span class="lineno">12</span> <span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="lineno">13</span> <span class="go">[&#39;clave&#39;, &#39;otra&#39;]</span>
+<span class="lineno">14</span> <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="lineno">15</span> <span class="go">[17, []]</span>
+</pre></div>
+</section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            31/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_code has_notes">
+        <div class="inner">
+          
+          <header><h1>Más sintaxis piola</h1></header>
+          
+          
+          <section><div class="highlight"><pre><span class="lineno">1</span> <span class="k">def</span> <span class="nf">nombre</span><span class="p">(</span><span class="n">descripcion</span><span class="p">):</span>
+<span class="lineno">2</span>     <span class="sd">&quot;&quot;&quot;Obtiene el nombre a partir de una linea en usuarios.txt&quot;&quot;&quot;</span>
+<span class="lineno">3</span>     <span class="k">return</span> <span class="n">descripcion</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="lineno">4</span> 
+<span class="lineno">5</span> <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;usuarios.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="lineno">6</span>     <span class="n">usuarios</span> <span class="o">=</span> <span class="p">[</span><span class="n">nombre</span><span class="p">(</span><span class="n">linea</span><span class="p">)</span> <span class="k">for</span> <span class="n">linea</span> <span class="ow">in</span> <span class="n">f</span><span class="p">]</span>
+<span class="lineno">7</span> <span class="n">usuarios</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;admin&#39;</span><span class="p">)</span>
+<span class="lineno">8</span> <span class="n">usuarios</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+</pre></div>
+
+<p class="notes">son objetos! sin declarar! docstring! whitespace! sin llaves! with! iterando sobre archivos! comprehensions</p></section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            32/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide has_code">
+        <div class="inner">
+          
+          <header><h1>Sí, como en la primaria</h1></header>
+          
+          
+          <section><h2>Comprehensions</h2>
+<div class="highlight"><pre><span class="lineno">1</span> <span class="kn">import</span> <span class="nn">itertools</span>
+<span class="lineno">2</span> <span class="n">candidatos</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+<span class="lineno">3</span> <span class="n">ternas</span> <span class="o">=</span> <span class="p">[(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">candidatos</span> <span class="k">if</span> <span class="n">c1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">c2</span><span class="o">**</span><span class="mi">2</span> <span class="o">==</span> <span class="n">h</span><span class="o">**</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</section>
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            33/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide">
+        <div class="inner">
+          
+          <header><h1>Pero lo mejor no está en el lenguaje....</h1></header>
+          
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            34/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide">
+        <div class="inner">
+          
+          <header><h1>Preguntas?</h1></header>
+          
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            35/36
+          </aside>
+        </footer>
+      </div>
+      
+      <!-- slide source: intro-python.md -->
+      <div class="slide">
+        <div class="inner">
+          
+          <header><h1><a href="http://github.com/dmoisset/slides/">http://github.com/dmoisset/slides/</a> (intro-python)</h1></header>
+          
+          
+        </div>
+        <footer>
+          
+          <aside class="source">
+            Source: <a href="file:///home/dmoisset/src/slides/intro-python/intro-python.md">intro-python.md</a>
+          </aside>
+          
+          <aside class="page_number">
+            36/36
+          </aside>
+        </footer>
+      </div>
+      
+    </div>
+  </div>
+  
+  <div id="toc" class="sidebar hidden">
+    <h2>Table of Contents</h2>
+    <table>
+      <caption>Table of Contents</caption>
+            
+      <tr id="toc-row-1">
+        <th><a href="#slide1">Introducción a Python</a></th>
+        <td><a href="#slide1">1</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-4">
+        <th><a href="#slide4">Python</a></th>
+        <td><a href="#slide4">4</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-5">
+        <th><a href="#slide5">es</a></th>
+        <td><a href="#slide5">5</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-6">
+        <th><a href="#slide6">la</a></th>
+        <td><a href="#slide6">6</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-7">
+        <th><a href="#slide7">posta!</a></th>
+        <td><a href="#slide7">7</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-8">
+        <th><a href="#slide8">Preguntas?</a></th>
+        <td><a href="#slide8">8</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-9">
+        <th><a href="#slide9">Python es portable</a></th>
+        <td><a href="#slide9">9</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-10">
+        <th><a href="#slide10">Python es software libre</a></th>
+        <td><a href="#slide10">10</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-11">
+        <th><a href="#slide11">Python es orientado a objetos</a></th>
+        <td><a href="#slide11">11</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-12">
+        <th><a href="#slide12">Python es de propósito general</a></th>
+        <td><a href="#slide12">12</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-13">
+        <th><a href="#slide13">Y se usa para proyectos de verdad</a></th>
+        <td><a href="#slide13">13</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-14">
+        <th><a href="#slide14">El desarrollo está muy activo</a></th>
+        <td><a href="#slide14">14</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-15">
+        <th><a href="#slide15">Y hay varias implementaciones</a></th>
+        <td><a href="#slide15">15</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-16">
+        <th><a href="#slide16">Mas features</a></th>
+        <td><a href="#slide16">16</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-17">
+        <th><a href="#slide17">Todo eso en</a></th>
+        <td><a href="#slide17">17</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-18">
+        <th><a href="#slide18">Mito 1</a></th>
+        <td><a href="#slide18">18</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-19">
+        <th><a href="#slide19">Mito 1</a></th>
+        <td><a href="#slide19">19</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-20">
+        <th><a href="#slide20">Mito 2</a></th>
+        <td><a href="#slide20">20</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-21">
+        <th><a href="#slide21">Mito 2</a></th>
+        <td><a href="#slide21">21</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-22">
+        <th><a href="#slide22">Mito 3</a></th>
+        <td><a href="#slide22">22</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-23">
+        <th><a href="#slide23">Mito 3</a></th>
+        <td><a href="#slide23">23</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-24">
+        <th><a href="#slide24">Mito 4</a></th>
+        <td><a href="#slide24">24</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-25">
+        <th><a href="#slide25">El shell interactivo</a></th>
+        <td><a href="#slide25">25</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-26">
+        <th><a href="#slide26">Soporte completo unicode</a></th>
+        <td><a href="#slide26">26</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-27">
+        <th><a href="#slide27">Sintáxis piola</a></th>
+        <td><a href="#slide27">27</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-28">
+        <th><a href="#slide28">Tipos de muy alto nivel</a></th>
+        <td><a href="#slide28">28</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-29">
+        <th><a href="#slide29">Tipos de muy alto nivel</a></th>
+        <td><a href="#slide29">29</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-30">
+        <th><a href="#slide30">Tipos de muy alto nivel</a></th>
+        <td><a href="#slide30">30</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-31">
+        <th><a href="#slide31">Tipos de muy alto nivel</a></th>
+        <td><a href="#slide31">31</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-32">
+        <th><a href="#slide32">Más sintaxis piola</a></th>
+        <td><a href="#slide32">32</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-33">
+        <th><a href="#slide33">Sí, como en la primaria</a></th>
+        <td><a href="#slide33">33</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-34">
+        <th><a href="#slide34">Pero lo mejor no está en el lenguaje....</a></th>
+        <td><a href="#slide34">34</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-35">
+        <th><a href="#slide35">Preguntas?</a></th>
+        <td><a href="#slide35">35</a></td>
+      </tr>
+      
+            
+      <tr id="toc-row-36">
+        <th><a href="#slide36"><a href="http://github.com/dmoisset/slides/">http://github.com/dmoisset/slides/</a> (intro-python)</a></th>
+        <td><a href="#slide36">36</a></td>
+      </tr>
+      
+      
+    </table>
+  </div>
+  
+  <div id="help" class="sidebar hidden">
+    <h2>Help</h2>
+    <table>
+      <caption>Help</caption>
+      <tr>
+        <th>Table of Contents</th>
+        <td>t</td>
+      </tr>
+      <tr>
+        <th>Source Files</th>
+        <td>s</td>
+      </tr>
+      <tr>
+        <th>Slide Numbers</th>
+        <td>n</td>
+      </tr>
+      <tr>
+        <th>Notes</th>
+        <td>2</td>
+      </tr>
+      <tr>
+        <th>Help</th>
+        <td>h</td>
+      </tr>
+    </table>
+  </div>
+  <script>main()</script>
+</body>
+</html>
